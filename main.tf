@@ -8,11 +8,11 @@ terraform {
 }
 
 provider "google" {
-  credentials = file("gcpservacckeys-terraformpractice.json")
+  credentials = file(var.credentials_file)
 
-  project = "terraform-gcp-guide"
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  project = var.project
+  region  = var.region
+  zone    = var.zone
 }
 
 resource "google_compute_network" "vpc_network" {
@@ -22,10 +22,11 @@ resource "google_compute_network" "vpc_network" {
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-instance"
   machine_type = "f1-micro"
+  tags         = ["web", "dev"]
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "cos-cloud/cos-stable"
     }
   }
 
